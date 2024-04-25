@@ -20,7 +20,7 @@ func main() {
 	}
 	splitarray := strings.Split(string(file), " ")
 	splitarray = HexandBin(splitarray)
-	splitarray = formspaces(splitarray)
+	//splitarray = formspaces(splitarray)
 	output := strings.Join(splitarray, " ")
 	err = os.WriteFile(os.Args[2], []byte(output), 0644)
 	if err != nil {
@@ -28,29 +28,33 @@ func main() {
 		return
 	}
 }
+// checking whether i-1 is convertible or not
+func isHex(s string) bool {
+    _, err := strconv.ParseUint(s, 16, 64)
+    return err == nil
+}
+
+func isBin(s string) bool {
+    _, err := strconv.ParseUint(s, 2, 64)
+    return err == nil
+}
+// convirting
 func HexandBin(s []string) []string {
 	arr := s
 	for i := 0; i <= len(arr)-1; i++ {
-		if arr[i] == "(hex)" {
+		if arr[i] == "(hex)" && isHex(arr[i-1]) {
 			bt, _ := strconv.ParseInt(arr[i-1], 16, 64)
 			arr[i-1] = strconv.Itoa(int(bt))
 			arr[i] = ""
-		}
-		if arr[i] == "(bin)" {
+		} else if arr[i] == "(bin)" && isBin(arr[i-1]) {
 			bt, _ := strconv.ParseInt(arr[i-1], 2, 64)
 			arr[i-1] = strconv.Itoa(int(bt))
 			arr[i] = ""
+		} else {
+			fmt.Print("")
 		}
 	}
 	return arr
 }
 
-func formspaces(arr []string) []string {
-	result := []string{}
-	for i := 0; i < len(arr); i++ {
-		if arr[i] != "" {
-			result = append(result, arr[i])
-		}
-	}
-	return result
-}
+
