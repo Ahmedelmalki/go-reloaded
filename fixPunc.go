@@ -17,22 +17,20 @@ func main() {
 	}
 	splitarray := strings.Split(string(file), "\n")
 	splitarray = strings.Split(string(file), " ")
-	splitarray = fixPunc(strings.Join(splitarray, " "))
+	//splitarray = fixPunc(strings.Join(splitarray, " "))
 	output := strings.Join(splitarray, " ")
-	err = os.WriteFile(os.Args[2], []byte(output), 0644)
-	if err != nil {
-		fmt.Printf("Error")
-		return
-	//fmt.Printf(output)
-	}
-	
+	// err = os.WriteFile(os.Args[2], []byte(output), 0644)
+	// if err != nil {
+	// 	fmt.Printf("Error")
+	// 	return
+	fmt.Printf(output)
+	} else if len(os.Args) !=3 {
+		fmt.Printf("error: u did not use 3 args")	
 		
-	} else if len(os.Args) <= 2 {
-		fmt.Printf("error: u did not use 3 args")
-	} else {
-		fmt.Printf("error: u did not use 3 args")
-	}
-}
+	} 
+ }
+	
+
 func hasPunctuation(s string) bool {
 	for _, r := range s {
 		if unicode.IsPunct(r) {
