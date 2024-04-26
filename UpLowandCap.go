@@ -18,9 +18,12 @@ func main() {
 		splitarray := strings.Split(string(file), "\n")
 		splitarray = strings.Split(string(file), " ")
 		splitarray = formspaces(splitarray)
+		//splitarray = fixPunc(splitarray)
 		splitarray = upLowandCap(splitarray)
 		output := strings.Join(splitarray, " ")
-		err = os.WriteFile(os.Args[2], []byte(output), 0644)
+		output= fixPunc(output)
+		//output = formspaces(strings.Join(output))
+		err = os.WriteFile(os.Args[2], []byte(output), 0o644)
 		if err != nil {
 			fmt.Printf("Error")
 			return
@@ -31,7 +34,6 @@ func main() {
 		fmt.Printf("error: u did not use 3 args")
 	}
 }
-
 
 // using trimatoi for converting from string to int
 func TrimAtoi(s string) int {
@@ -57,7 +59,7 @@ func TrimAtoi(s string) int {
 
 func upLowandCap(arr []string) []string {
 	for i := 0; i <= len(arr)-1; i++ {
-		//for changging more than one string
+		// for changging more than one string
 		if arr[i] == "(up," {
 			indix := TrimAtoi(arr[i+1])
 			for j := 1; j <= indix; j++ {
@@ -77,7 +79,7 @@ func upLowandCap(arr []string) []string {
 		if arr[i] == "(cap," {
 			indix := TrimAtoi(arr[i+1])
 			for j := 1; j <= indix; j++ {
-				arr[i-j] = strings.ToUpper(arr[i-j][:1])+strings.ToLower(arr[i-j][1:])
+				arr[i-j] = strings.ToUpper(arr[i-j][:1]) + strings.ToLower(arr[i-j][1:])
 			}
 			arr[i] = ""
 			arr[i+1] = ""
@@ -91,12 +93,13 @@ func upLowandCap(arr []string) []string {
 			arr[i] = ""
 		}
 		if arr[i] == "(cap)" {
-			arr[i-1] = strings.Title(arr[i-1])
+			arr[i-1] = strings.ToUpper(arr[i-1][:1]) + strings.ToLower(arr[i-1][1:])
 			arr[i] = ""
 		}
 	}
 	return arr
 }
+
 func formspaces(arr []string) []string {
 	result := []string{}
 	for i := 0; i < len(arr); i++ {
@@ -105,4 +108,30 @@ func formspaces(arr []string) []string {
 		}
 	}
 	return result
+}
+
+// to fix the punctuations
+func fixPunc(s string) string {
+	rs := ""
+	maxlen := len(s)
+	for i := 0; i < maxlen; i++ {
+		char := rune(s[i])
+		if char == '.' || char == ',' || char == '!' || char == '?' || char == ':' || char == ';' {
+			if rune(rs[len(rs)-1]) == ' ' {
+				rs = rs[:len(rs)-1]
+				rs += string(char)
+			} else {
+				rs += string(char)
+			}
+			if i < maxlen-1 {
+				if rune(s[i+1]) != ' ' {
+					rs += " "
+				}
+			}
+		} else {
+			rs += string(char)
+		}
+
+	}
+	return rs
 }
