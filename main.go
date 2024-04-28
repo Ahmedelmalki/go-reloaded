@@ -16,20 +16,20 @@ func main() {
 			return
 		}
 		// here where we will call our funcs :)
-		splitarray := strings.Split(string(file), "\n")
-		splitarray = strings.Split(string(file), " ")
-		splitarray = Formspaces(splitarray)
-		splitarray = upLowandCap(splitarray)
-		splitarray = HexandBin(splitarray)
-		splitarray = AtoAN(splitarray)
-		output := strings.Join(splitarray, " ")
-		output = FixPunc(output)
-		// err = os.WriteFile(os.Args[2], []byte(output), 0o644)
-		// if err != nil {
-		// 	fmt.Printf("Error")
-		// 	return
-		fmt.Println(output)
-		// }
+		// splitarray := strings.Split(string(file), "\n")
+		splitarray := strings.Split(string(file), " ")
+		splitarray1 := Formspaces(splitarray)
+		splitarray2 := upLowandCap(splitarray1)
+		splitarray3 := HexandBin(splitarray2)
+		splitarray4 := AtoAN(splitarray3)
+		output := strings.Join(splitarray4, " ")
+		output1 := FixPunc(output)
+		err = os.WriteFile(os.Args[2], []byte(output1), 0o644)
+		if err != nil {
+			fmt.Printf("Error")
+			return
+			fmt.Println(output1)
+		}
 
 	} else if len(os.Args) != 3 {
 		fmt.Println("error: u did not use 3 args")
@@ -39,47 +39,51 @@ func main() {
 //_________________________________________________________________________//
 
 // using trimatoi for converting from string to int
-func TrimAtoi(s string) int {
-	num := []rune{}
-	ss := []rune(s)
-	sign := 1
-	b := false
-	for i := 0; i < len(s); i++ {
-		if ss[i] == '-' && b == false {
-			sign = sign * -1
-		}
-		if s[i] <= '9' && ss[i] >= '0' {
-			b = true
-			num = append(num, ss[i])
-		}
-	}
-	sum := 0
-	for i := 0; i < len(num); i++ {
-		sum = sum*10 + int(num[i]-'0')
-	}
-	return sum * sign
-}
+// func TrimAtoi(s string) int {
+// 	num := []rune{}
+// 	ss := []rune(s)
+// 	sign := 1
+// 	b := false
+// 	for i := 0; i < len(s); i++ {
+// 		if ss[i] == '-' && b == false {
+// 			sign = sign * -1
+// 		}
+// 		if s[i] <= '9' && ss[i] >= '0' {
+// 			b = true
+// 			num = append(num, ss[i])
+// 		}
+// 	}
+// 	sum := 0
+// 	for i := 0; i < len(num); i++ {
+// 		sum = sum*10 + int(num[i]-'0')
+// 	}
+// 	return sum * sign
+// }
 
 func upLowandCap(arr []string) []string {
 	for i := 0; i <= len(arr)-1; i++ {
 		// for changging more than one string
-		if arr[i] == "(up," && arr[0] != "(up," {
+		if arr[i] == "(up," {
+			arr[i+1] = arr[i+1][:len(arr[i+1])-1]
 			if i != len(arr)-1 {
-				indix := TrimAtoi(arr[i+1])
-				for j := 1; j <= indix && i-j > 0; j++ {
+				indix, _ := strconv.Atoi(arr[i+1])
+				fmt.Println(arr, indix)
+				for j := 1; j <= indix && i-j >= 0; j++ {
+					fmt.Println(j)
 					arr[i-j] = strings.ToUpper(arr[i-j])
 				}
 				arr[i] = ""
 				arr[i+1] = ""
-			}  else {
+			} else {
 				fmt.Println("index out of range")
 				os.Exit(1)
 			}
 		}
 		if arr[i] == "(low," && arr[0] != "(low," {
+			arr[i+1] = arr[i+1][:len(arr[i+1])-1]
 			if i != len(arr)-1 {
-				indix := TrimAtoi(arr[i+1])
-				for j := 1; j <= indix && i-j > 0; j++ {
+				indix, _ := strconv.Atoi(arr[i+1])
+				for j := 1; j <= indix && i-j >= 0; j++ {
 					arr[i-j] = strings.ToLower(arr[i-j])
 				}
 				arr[i] = ""
@@ -90,8 +94,9 @@ func upLowandCap(arr []string) []string {
 			}
 		}
 		if arr[i] == "(cap," {
+			arr[i+1] = arr[i+1][:len(arr[i+1])-1]
 			if i != len(arr)-1 {
-				indix := TrimAtoi(arr[i+1])
+				indix, _ := strconv.Atoi(arr[i+1])
 				for j := 1; j <= indix && i-j > 0; j++ {
 					arr[i-j] = strings.ToUpper(arr[i-j][:1]) + strings.ToLower(arr[i-j][1:])
 				}

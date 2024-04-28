@@ -32,13 +32,10 @@ func fixSingleQuotes(s string) string {
         if rs[i] == "'" {
             if i > 0 && i < len(rs)-1 {
                 // If ' is not the first or last word
-                rs[i-1] = strings.TrimRight(rs[i-1], ",.:;!?") + "'"
-                rs[i+1] = "'" + strings.TrimLeft(rs[i+1], ",.:;!?")
+                rs[i-1] = strings.TrimSpace(rs[i-1]) 
+                rs[i+1] = strings.TrimSpace(rs[i+1])
                 rs = append(rs[:i], rs[i+1:]...)
-            } else {
-                // If ' is the first or last word, remove it
-                rs = append(rs[:i], rs[i+1:]...)
-            }
+			}
         }
     }
     return strings.Join(rs, " ")
