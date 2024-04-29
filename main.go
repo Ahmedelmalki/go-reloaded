@@ -24,11 +24,13 @@ func main() {
 		splitarray4 := AtoAN(splitarray3)
 		output := strings.Join(splitarray4, " ")
 		output1 := FixPunc(output)
-		err = os.WriteFile(os.Args[2], []byte(output1), 0o644)
+		fmt.Println(output1)
+		output2 := SingleQoutse(output1)
+		err = os.WriteFile(os.Args[2], []byte(output2), 0o644)
+		fmt.Println(output2)
 		if err != nil {
 			fmt.Printf("Error")
 			return
-			fmt.Println(output1)
 		}
 
 	} else if len(os.Args) != 3 {
@@ -36,29 +38,7 @@ func main() {
 	}
 }
 
-//_________________________________________________________________________//
-
-// using trimatoi for converting from string to int
-// func TrimAtoi(s string) int {
-// 	num := []rune{}
-// 	ss := []rune(s)
-// 	sign := 1
-// 	b := false
-// 	for i := 0; i < len(s); i++ {
-// 		if ss[i] == '-' && b == false {
-// 			sign = sign * -1
-// 		}
-// 		if s[i] <= '9' && ss[i] >= '0' {
-// 			b = true
-// 			num = append(num, ss[i])
-// 		}
-// 	}
-// 	sum := 0
-// 	for i := 0; i < len(num); i++ {
-// 		sum = sum*10 + int(num[i]-'0')
-// 	}
-// 	return sum * sign
-// }
+//---------------------------------------------------------------------------------------------
 
 func upLowandCap(arr []string) []string {
 	for i := 0; i <= len(arr)-1; i++ {
@@ -225,4 +205,33 @@ func Formspaces(arr []string) []string {
 		}
 	}
 	return result
+}
+
+//--------------------------------------------------------------------
+
+func SingleQoutse(s string) string {
+	rs := []rune(s)
+	b := true
+	for i := 0; i < len(rs); i++ {
+		if b && i > 0 && (i < len(rs)-1 ) && (rs[i] == '\'' && rs[i-1] == ' ') {
+			if rs[i+1] == ' ' {
+				fmt.Println("2222")
+				rs = append(rs[:i+1], rs[i+2:]...)
+				b = false
+				continue
+			}
+		} else if !b && rs[i] == '\'' && rs[i-1] == ' ' && i <= len(rs)-1 {
+			if rs[i-1] == ' ' {
+				fmt.Println("3333333333")
+				rs = append(rs[:i-1], rs[i:]...)
+				b = true
+				continue
+			}
+		}else if !b && rs[0] == '\'' && rs[1] == ' ' {
+			fmt.Println("111111")
+			rs = append(rs[:1], rs[2:]...)
+			continue
+		}
+	}
+	return string(rs)
 }
