@@ -26,7 +26,7 @@ func main() {
 		splitarray = goreloaded.AtoAN(splitarray)
 		output := strings.Join(splitarray, " ")
 		output = goreloaded.FixPunc(output)
-		output = goreloaded.SingleQuote(output)
+		 output = goreloaded.SingleQuote(output)
 		err = os.WriteFile(os.Args[2], []byte(output), 0o644)
 		fmt.Println(output)
 		if err != nil {
