@@ -6,7 +6,7 @@ func FixPunc(s string) string {
 	for i := 0; i < maxlen; i++ {
 		char := rune(s[i])
 		if char == '.' || char == ',' || char == '!' || char == '?' || char == ':' || char == ';' {
-			if rune(rs[len(rs)-1]) == ' ' {
+			if len(rs)-1 >= 0 && len(rs)-1 < len(s) && rune(rs[len(rs)-1]) == ' ' {
 				rs = rs[:len(rs)-1]
 				rs += string(char)
 			} else {

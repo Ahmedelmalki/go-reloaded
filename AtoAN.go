@@ -2,7 +2,7 @@ package goreloaded
 
 func isVowel(s string) bool {
 	char := s[0]
-	if char == 'a' || char == 'e' || char == 'u' || char == 'o' || char == 'i' || char == 'A' || char == 'E' || char == 'U' || char == 'O' || char == 'I' {
+	if char == 'a' || char == 'e' || char == 'u' || char == 'o' || char == 'i' || char == 'A' || char == 'E' || char == 'U' || char == 'O' || char == 'I' || char == 'h' || char == 'H' {
 		return true
 	}
 

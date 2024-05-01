@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"regexp"
 	"strings"
 
 	"goreloaded"
@@ -16,19 +17,23 @@ func main() {
 			fmt.Printf("Error")
 			return
 		}
-		// here where we will call our funcs :)
-		splitarray := strings.Split(string(file), "\n")
-		splitarray = strings.Split(string(file), " ")
-		fmt.Println(splitarray)
+		input := regexp.MustCompile("\n").ReplaceAllLiteralString(string(file), " \n ")
+		splitarray := strings.Split(input, " ")
 		splitarray = goreloaded.Formspaces(splitarray)
 		splitarray = goreloaded.UpLowandCap(splitarray)
 		splitarray = goreloaded.HexandBin(splitarray)
 		splitarray = goreloaded.AtoAN(splitarray)
-		output := strings.Join(splitarray, " ")
+		output := ""
+		for i := 0; i < len(splitarray); i++ {
+			if splitarray[i] != "\n" {
+				output += splitarray[i] + " "
+			} else {
+				output += splitarray[i]
+			}
+		}
 		output = goreloaded.FixPunc(output)
-		 output = goreloaded.SingleQuote(output)
+		output = goreloaded.SingleQuote(output)
 		err = os.WriteFile(os.Args[2], []byte(output), 0o644)
-		fmt.Println(output)
 		if err != nil {
 			fmt.Printf("Error")
 			return
