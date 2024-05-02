@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 
 	"goreloaded"
@@ -17,28 +16,26 @@ func main() {
 			fmt.Printf("Error")
 			return
 		}
-		input := regexp.MustCompile("\n").ReplaceAllLiteralString(string(file), " \n ")
-		splitarray := strings.Split(input, " ")
-		splitarray = goreloaded.Formspaces(splitarray)
-		splitarray = goreloaded.UpLowandCap(splitarray)
-		splitarray = goreloaded.HexandBin(splitarray)
-		splitarray = goreloaded.AtoAN(splitarray)
+		input := strings.Split(string(file), "\n")
+		var line []string
 		output := ""
-		for i := 0; i < len(splitarray); i++ {
-			if splitarray[i] != "\n" {
-				output += splitarray[i] + " "
-			} else {
-				output += splitarray[i]
-			}
+		for i := 0; i < len(input); i++ {
+			line = strings.Split(input[i], " ")
+			line = goreloaded.UpLowandCap(line)
+			line = goreloaded.HexandBin(line)
+			line = goreloaded.Formspaces(line)
+			line = goreloaded.AtoAN(line)
+			temp := strings.Join(line, " ")
+			temp = goreloaded.FixPunc(temp)
+			temp = goreloaded.SingleQuote(temp)
+			temp = strings.Trim(temp, " ")
+			output += temp + "\n"
 		}
-		output = goreloaded.FixPunc(output)
-		output = goreloaded.SingleQuote(output)
 		err = os.WriteFile(os.Args[2], []byte(output), 0o644)
 		if err != nil {
 			fmt.Printf("Error")
 			return
 		}
-
 	} else if len(os.Args) != 3 {
 		fmt.Println("error: u did not use 3 args")
 	}

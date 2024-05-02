@@ -20,7 +20,6 @@ func FixPunc(s string) string {
 		} else {
 			rs += string(char)
 		}
-
 	}
 	return rs
 }

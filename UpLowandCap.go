@@ -13,7 +13,6 @@ func UpLowandCap(arr []string) []string {
 			if i != len(arr)-1 {
 				arr[i+1] = arr[i+1][:len(arr[i+1])-1]
 				indix, _ := strconv.Atoi(arr[i+1])
-				fmt.Println(arr, indix)
 				for j := 1; j <= indix && i-j >= 0; j++ {
 					arr[i-j] = strings.ToUpper(arr[i-j])
 				}

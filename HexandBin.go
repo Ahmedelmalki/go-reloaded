@@ -2,33 +2,39 @@ package goreloaded
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 )
 
-func isHex(s string) bool {
-	_, err := strconv.ParseUint(s, 16, 64)
-	return err == nil
-}
-
-func isBin(s string) bool {
-	_, err := strconv.ParseUint(s, 2, 64)
-	return err == nil
-}
-
 func HexandBin(s []string) []string {
-	arr := s
-	for i := 0; i <= len(arr)-1; i++ {
-		if arr[i] == "(hex)" && isHex(arr[i-1]) {
-			bt, _ := strconv.ParseInt(arr[i-1], 16, 64)
-			arr[i-1] = strconv.Itoa(int(bt))
-			arr[i] = ""
-		} else if arr[i] == "(bin)" && isBin(arr[i-1]) {
-			bt, _ := strconv.ParseInt(arr[i-1], 2, 64)
-			arr[i-1] = strconv.Itoa(int(bt))
-			arr[i] = ""
-		} else {
-			fmt.Print("")
+	for i := 0; i <= len(s)-1; i++ {
+		if s[0] == "(hex)" || s[0] == "(bin)" {
+			s[0] = ""
+			fmt.Println("invalid input")
+			os.Exit(0)
+		}
+		if s[i] == "(hex)" && i != 0 {
+			bt, err := strconv.ParseInt(s[i-1], 16, 64)
+			if err != nil {
+				fmt.Println("invalid input")
+				os.Exit(0)
+			}
+			s[i-1] = strconv.Itoa(int(bt))
+			s[i] = ""
+			s = append(s[:i], s[i+1:]...)
+			i--
+		}
+		if s[i] == "(bin)" && i != 0 {
+			bt, err := strconv.ParseInt(s[i-1], 2, 64)
+			if err != nil {
+				fmt.Println("invalid input")
+				os.Exit(0)
+			}
+			s[i-1] = strconv.Itoa(int(bt))
+			s[i] = ""
+			s = append(s[:i], s[i+1:]...)
+			i--
 		}
 	}
-	return arr
+	return s
 }
